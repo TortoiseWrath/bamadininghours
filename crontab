@@ -1,0 +1,1 @@
+0 1 * * * curl http://localhost/bamadininghours/ >/dev/null 2>&1
