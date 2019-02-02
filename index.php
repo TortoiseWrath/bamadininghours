@@ -15,10 +15,9 @@
 		@$doc->loadHTML($dining_html);
 		$paragraphs = $doc->getElementsByTagName('p');
 		$output = '';
-		foreach($paragraphs as $p) {
+		foreach($paragraphs as $p)
 			if(strpos($p->getAttribute('class'), 'copyright') === false && strpos($p->getAttribute('class'), 'back') === false)
-			$output .= $p->ownerDocument->saveHTML($p);
-		}
+				$output .= $p->ownerDocument->saveHTML($p);
 		file_put_contents("cache/$date.html", $output);
 	}
 	echo file_get_contents("cache/$date.html");
