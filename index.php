@@ -13,6 +13,7 @@
 	echo $date_long;
 ?></title>
 <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=320, initial-scale=1">
 <meta charset="UTF-8">
 <h1 style="text-align: center;"><?=$date_long?></h1>
 <?php
