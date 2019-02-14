@@ -8,17 +8,18 @@
 <meta charset="UTF-8">
 <h1 style="text-align: center;"><?=$date?></h1>
 <?php
+	require_once('parsers.php');
 	$date = date('Y-m-d');
-	if(!file_exists("cache/$date.html")) {
-		$dining_html = file_get_contents("http://bamadining.ua.edu/calendar/hours-of-operation$date/");
-		$doc = new DOMDocument();
-		@$doc->loadHTML($dining_html);
-		$paragraphs = $doc->getElementsByTagName('p');
-		$output = '';
-		foreach($paragraphs as $p) {
-			if(strpos($p->getAttribute('class'), 'copyright') === false && strpos($p->getAttribute('class'), 'back') === false)
-			$output .= $p->ownerDocument->saveHTML($p);
+	if(isset($_GET['date'])) {
+		$date = date('Y-m-d', strtotime($_GET['date']));
+	}
+	if(!file_exists("cache/$date.html") || filesize("cache/$date.html") < 500) {
+		$dining_html = @file_get_contents("http://bamadining.ua.edu/calendar/hours-of-operation$date/");
+		if($dining_html === false) {
+			parseCampusdish("https://ua.campusdish.com/LocationsAndMenus", $date);
 		}
-		file_put_contents("cache/$date.html", $output);
+		else {
+			parseCalendar($dining_html);
+		}
 	}
 	echo file_get_contents("cache/$date.html");
