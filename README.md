@@ -1,8 +1,8 @@
 # bamadininghours
 
-a stupid php script i wrote to cache the bama dining hours
+a stupid php script i wrote to cache the bama dining hours, now with campusdish support because the calendar is broken
 
-requires php-dom
+requires php-dom and php-openssl
 
 i have it caching each day at 1am with a cron job on my server lol
 
