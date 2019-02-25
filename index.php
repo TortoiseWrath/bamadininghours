@@ -20,7 +20,7 @@
 		require_once('parsers.php');
 		$dining_html = @file_get_contents("http://bamadining.ua.edu/calendar/hours-of-operation$date/");
 		if($dining_html === false) {
-			parseCampusdish("https://ua.campusdish.com", $date);
+			parseCampusdish("https://ua.campusdish.com");
 		}
 		else {
 			parseCalendar($dining_html, $date);

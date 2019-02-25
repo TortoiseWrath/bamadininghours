@@ -1,7 +1,9 @@
 <?php
-	function parseCalendar($html, $date) {
+	function parseCalendar($html) {
+		global $date;
 		require('parseCalendar.php');
 	}
-	function parseCampusdish($url, $date) {
+	function parseCampusdish($url) {
+		global $date;
 		require('parseCampusdish.php');
 	}
