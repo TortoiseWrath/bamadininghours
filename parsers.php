@@ -1,5 +1,5 @@
 <?php
-	function parseCalendar($html) {
+	function parseCalendar($html, $date) {
 		require('parseCalendar.php');
 	}
 	function parseCampusdish($url, $date) {
