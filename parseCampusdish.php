@@ -44,10 +44,10 @@
 			$groupName = $xp->query("div[@class='mealPeriod']", $group)->item(0)->textContent;
 			$groupHours = $xp->query("ul/li", $group);
 			$hours = "CLOSED";
-			foreach($groupHours as $hours) {
-				$days = $xp->query("span[@class='location__day']", $hours)->item(0)->textContent;
+			foreach($groupHours as $gh) {
+				$days = $xp->query("span[@class='location__day']", $gh)->item(0)->textContent;
 				if(daysContain($days, $day)) {
-					$hours = $xp->query("span[@class='location__times']", $hours)->item(0)->textContent;
+					$hours = $xp->query("span[@class='location__times']", $gh)->item(0)->textContent;
 					break;
 				}
 			}
