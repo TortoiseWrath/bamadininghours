@@ -32,16 +32,24 @@
 	// 	var_dump(daysContain("Sat - Mon, Thu", $i));
 	// }
 
-	function hoursList($url, $day) {
-
+	function hoursList($url, $day, $date) {
 		$doc = new DOMDocument();
 		@$doc->loadHTML(file_get_contents($url));
 		$xp = new DOMXpath($doc);
-		$hourGroups = $xp->query("//*/main/div/div/div/div[@class='location__details']/div[@class='location__hours']/ul/li");
+		$hourGroups = $xp->query("//div[@class='location__hours']/ul[1]/li");
+		// var_dump($url, $hourGroups);
 
 		$output = '<ul>';
 		foreach($hourGroups as $group) {
 			$groupName = $xp->query("div[@class='mealPeriod']", $group)->item(0)->textContent;
+			$specialHours = $xp->query("../../../../../..", $group);
+			$specialHours = $specialHours && $specialHours->length && preg_match("/^hoursModal[0-9]+$/", $specialHours->item(0)->getAttribute("id")) ? 
+				$xp->query("//span[@class='modal-title']", $specialHours->item(0))->item(0)->textContent
+				: false;
+			if($specialHours && !preg_match("`[^1]$date`", $specialHours)) {
+				continue; // not today's special hours
+			}
+			// var_dump($specialRoot);
 			$groupHours = $xp->query("ul/li", $group);
 			$hours = "CLOSED";
 			foreach($groupHours as $gh) {
@@ -53,7 +61,10 @@
 			}
 			if(strtolower($hours) !== 'closed') {
 				$output .= "<li>";
-				if($hourGroups->length > 1) {
+				if($specialHours) {
+					$output .= "<h4>" . trim(preg_replace("`\($date\)`", "", $specialHours)) . "</h4>";
+				}
+				if($group->previousSibling !== NULL || $group->nextSibling !== NULL) {
 					$output .= "<h4>$groupName</h4>";
 				}
 				$output .= $hours;
@@ -69,6 +80,7 @@
 	}
 
 	$day = date('w', strtotime($date));
+	$dateFormatted = date('n/j', strtotime($date));
 
 	$doc = new DOMDocument();
 	$locationPrefix = 'LocationsAndMenus';
@@ -102,12 +114,12 @@
 			$output .= "<ul>";
 			foreach($link as $key=>$link) {
 				$output .= "<li id=\"$key\"><h3>".$names[$key]."</h3>";
-				$output .= hoursList("$url/$locationPrefix/$link", $day);
+				$output .= hoursList("$url/$locationPrefix/$link", $day, $dateFormatted);
 			}
 			$output .= '</ul>';
 		}
 		else {
-			$output .= hoursList("$url/$locationPrefix/$link", $day);
+			$output .= hoursList("$url/$locationPrefix/$link", $day, $dateFormatted);
 		}
 	}
 	$output .= '</ul>';

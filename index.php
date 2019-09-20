@@ -16,7 +16,7 @@
 <meta charset="UTF-8">
 <h1 style="text-align: center;"><?=$date_long?></h1>
 <?php
-	if(!file_exists("cache/$date.html") || filesize("cache/$date.html") < 500) {
+	if(!file_exists("cache/$date.html") || filesize("cache/$date.html") < 500 || isset($_GET["debug"])) {
 		require_once('parsers.php');
 		$dining_html = @file_get_contents("http://bamadining.ua.edu/calendar/hours-of-operation$date/");
 		if($dining_html === false) {
